@@ -5,26 +5,26 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
+// import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.auto.AutonomousCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.OnBoardIO;
 import frc.robot.subsystems.OnBoardIO.ChannelMode;
-import frc.robot.GameController;
-import frc.robot.Constants;
-import frc.robot.Constants.OiConstants;
+// import frc.robot.GameController;
+// import frc.robot.Constants;
+// import frc.robot.Constants.OiConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,7 +38,7 @@ public class RobotContainer {
   private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.INPUT, ChannelMode.INPUT);
 
   // Assumes a gamepad plugged into channnel 0
-  private final Joystick m_controller = new Joystick(9);
+  private final Joystick m_controller = new Joystick(0);
 
   // Create SmartDashboard chooser for autonomous routines
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -46,7 +46,7 @@ public class RobotContainer {
   // public final DigitalOutput trig = new DigitalOutput(9);
   public final AnalogInput echo = new AnalogInput(0);
 
-  private final GameController driverController = new GameController(OiConstants.DRIVER_CONTROLLER_PORT);
+  //private final GameController driverController = new GameController(OiConstants.DRIVER_CONTROLLER_PORT);
   SendableChooser<String>      autoChooser      = new SendableChooser<>();
   
   // private static final DigitalOutput mb1013o = new DigitalOutput(9);
@@ -95,10 +95,10 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(getArcadeDriveCommand());
 
     // Example of how to use the onboard IO
-    Button onboardButtonA = new Button(m_onboardIO::getButtonAPressed);
+    Trigger onboardButtonA = new Trigger(m_onboardIO::getButtonAPressed);
     onboardButtonA
-        .whenActive(ping())
-        .whenInactive(new PrintCommand("Button A Released"));
+        .onTrue(ping())
+        .onFalse(new PrintCommand("Button A Released"));
 
     // Setup SmartDashboard options
     m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(m_drivetrain));
