@@ -38,6 +38,9 @@ public class Drivetrain extends SubsystemBase {
   // Set up the BuiltInAccelerometer
   private final BuiltInAccelerometer m_accelerometer = new BuiltInAccelerometer();
 
+  private double         leftSpeed          = 0;
+  private double         rightSpeed         = 0;
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     // We need to invert one side of the drivetrain so that positive voltages
@@ -143,5 +146,17 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void setMotorSpeeds(double leftSpeed, double rightSpeed) {
+
+    this.leftSpeed  = leftSpeed;
+    this.rightSpeed = rightSpeed;
+
+    m_leftMotor.set(leftSpeed);
+    m_rightMotor.set(rightSpeed);
+
+    // NOTE: The follower motors are set to follow the primary
+    // motors
   }
 }

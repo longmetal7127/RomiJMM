@@ -4,9 +4,13 @@
 
 package frc.robot;
 
-// import edu.wpi.first.wpilibj.AnalogInput;
-// import edu.wpi.first.wpilibj.DigitalOutput;
+import java.lang.ref.Cleaner;
+
+import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.wpilibj.AnalogInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 // import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -25,20 +29,20 @@ public class Robot extends TimedRobot {
   // private final AnalogInput echo = new AnalogInput(0);
   
   // distance in inches the robot wants to stay from an object
-  // private static final double kHoldDistance = 12.0;
+  private static final double kHoldDistance = 12.0;
 
   // factor to convert sensor values to a distance in inches
-  // private static final double kValueToInches = 0.125;
+  private static final double kValueToInches = 0.125;
 
   // proportional speed constant
-  // private static final double kP = 0.05;
+  private static final double kP = 0.05;
 
-  // private static final int kUltrasonicPort = 10;
+  // private static final int kUltrasonicPort = 0;
 
   // median filter to discard outliers; filters over 10 sampleshttps://open.spotify.com/track/6p5CmR50Qd1e3Ouma2e8yx?si=36230758b6d94a47
-  // private final MedianFilter m_filter = new MedianFilter(10);
+  private final MedianFilter m_filter = new MedianFilter(10);
   
-  // private final DigitalInput m_ultrasonic = new DigitalInput(kUltrasonicPort);
+  // private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,12 +52,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    // Shuffleboard.getTab("Example tab").add(trig);
+    //  Shuffleboard.getTab("Example tab").add(m_ultrasonic);
     // Shuffleboard.getTab("Example tab").add(echo);    
 
     m_robotContainer = new RobotContainer();  
-    m_robotContainer.trig.set(true);
-    System.out.println("trig: " + m_robotContainer.trig.get());
+    // m_robotContainer.trig.set(true);
+    // System.out.println("trig: " + m_robotContainer.trig.get());
   }
 
   /**
@@ -72,19 +76,19 @@ public class Robot extends TimedRobot {
 
     // double currentDistance = m_filter.calculate(m_ultrasonic.getValue()) * kValueToInches;
     // convert distance error to a motor speed
-    //double currentSpeed = (kHoldDistance - currentDistance) * kP;
+    // double currentSpeed = (kHoldDistance - currentDistance) * kP;
 
     // System.out.println(m_ultrasonic.get());
-    for(var x = 0 ; x!=1000000000 ; x++){
-      if(x == 100000000){
+    // for(var x = 0 ; x!=1000000000 ; x++){
+      // if(x == 100000000){
         //m_robotContainer.trig.pulse(100);
-        System.out.println("echo: " + m_robotContainer.echo.getValue());
+        // System.out.println("echo: " + m_robotContainer.echo.getValue());
         // System.out.println("trig: " + trig.isPulsing());
         //trig.set(false);
-        x=0;
-      }
+        // x=0;
+      // }
       // System.out.println("trig: " + trig.isPulsing());
-    }
+    // }
 
     CommandScheduler.getInstance().run();
   }

@@ -5,22 +5,26 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
+// import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.commands.auto.AutonomousCommand;
+import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.OnBoardIO;
 import frc.robot.subsystems.OnBoardIO.ChannelMode;
+// import frc.robot.GameController;
+// import frc.robot.Constants;
+// import frc.robot.Constants.OiConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,8 +43,11 @@ public class RobotContainer {
   // Create SmartDashboard chooser for autonomous routines
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  public final DigitalOutput trig = new DigitalOutput(9);
+  // public final DigitalOutput trig = new DigitalOutput(9);
   public final AnalogInput echo = new AnalogInput(0);
+
+  //private final GameController driverController = new GameController(OiConstants.DRIVER_CONTROLLER_PORT);
+  SendableChooser<String>      autoChooser      = new SendableChooser<>();
   
   // private static final DigitalOutput mb1013o = new DigitalOutput(9);
   // private static final AnalogInput mb1013i = new AnalogInput(0);
@@ -68,8 +75,12 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings(); 
     // Ultrasonic.setAutomaticMode(true); 
-    Shuffleboard.getTab("Example tab").add(trig);
-    Shuffleboard.getTab("Example tab").add(echo); 
+    // Shuffleboard.getTab("Example tab").add(trig);
+    // Shuffleboard.getTab("Example tab").add(echo); 
+
+    SmartDashboard.putNumber("gyrox", m_drivetrain.getGyroAngleX());
+    SmartDashboard.putNumber("gyrox", m_drivetrain.getGyroAngleY());
+    SmartDashboard.putNumber("gyrox", m_drivetrain.getGyroAngleZ());
   }
 
   /**
@@ -84,10 +95,10 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(getArcadeDriveCommand());
 
     // Example of how to use the onboard IO
-    Button onboardButtonA = new Button(m_onboardIO::getButtonAPressed);
+    Trigger onboardButtonA = new Trigger(m_onboardIO::getButtonAPressed);
     onboardButtonA
-        .whenActive(ping())
-        .whenInactive(new PrintCommand("Button A Released"));
+        .onTrue(ping())
+        .onFalse(new PrintCommand("Button A Released"));
 
     // Setup SmartDashboard options
     m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(m_drivetrain));
@@ -105,7 +116,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    return new AutonomousCommand(m_drivetrain, autoChooser);
+    // return m_chooser.getSelected();
   }
 
   /**
